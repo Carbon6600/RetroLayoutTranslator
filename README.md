@@ -1,7 +1,6 @@
 # RetroLayoutTranslator
 
-![Uploading image.png…]()
-
+<img width="493" height="604" alt="Знімок екрана 2026-01-21 204653" src="https://github.com/user-attachments/assets/ae90af8e-a327-4155-a213-78ad6105423a" />
 
 **Віндовс-стайл перекладач помилкової розкладки клавіатури**
 
