@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Переводчик крякоэябр</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #000066;
+            color: #000;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: 
+                linear-gradient(rgba(0, 0, 102, 0.8), rgba(0, 0, 102, 0.8)),
+                url('https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+        }
+        
+        /* Фон "Сделано в Украине" */
+        .ukraine-badge {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 180px;
+            height: 180px;
+            opacity: 0.2;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .ukraine-badge img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .container {
+            width: 500px;
+            background-color: #c0c0c0;
+            border: 2px outset #ffffff;
+            border-radius: 0;
+            box-shadow: 
+                3px 3px 5px rgba(0, 0, 0, 0.5),
+                inset 1px 1px 0px #ffffff;
+            overflow: visible;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header {
+            background: linear-gradient(to right, #000080, #1084d0);
+            color: #ffffff;
+            padding: 6px 10px;
+            border-bottom: 2px inset #808080;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 40px;
+        }
+        
+        .header h1 {
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            text-shadow: 1px 1px 1px #000;
+            margin: 0;
+            padding: 0;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+        }
+        
+        .title-icon {
+            font-size: 14px;
+            margin-right: 8px;
+            color: #ffff00;
+        }
+        
+        .subtitle {
+            font-size: 11px;
+            opacity: 0.9;
+            font-style: italic;
+            color: #ffffff;
+            margin-left: 25px;
+        }
+        
+        .language-switcher {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .language-select {
+            background-color: #ffffff;
+            border: 1px inset #808080;
+            color: #000000;
+            padding: 2px 20px 2px 6px;
+            font-size: 11px;
+            width: 120px;
+            cursor: pointer;
+            font-weight: bold;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpolygon%20fill%3D%22%23000000%22%20points%3D%220%2C0%208%2C8%2016%2C0%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 5px center;
+            background-size: 10px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+        
+        .language-select:focus {
+            outline: 1px dotted #000000;
+        }
+        
+        .content {
+            padding: 15px;
+        }
+        
+        .translation-area {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .input-group, .output-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .input-label, .output-label {
+            font-size: 12px;
+            font-weight: bold;
+            color: #000000;
+            margin-left: 3px;
+        }
+        
+        .text-input, .text-output {
+            width: 100%;
+            height: 70px;
+            padding: 8px;
+            background-color: #ffffff;
+            border: 2px inset #808080;
+            color: #000000;
+            font-size: 14px;
+            resize: none;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .text-input:focus {
+            outline: 1px dotted #000000;
+        }
+        
+        .text-output {
+            background-color: #ffffff;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            border: 2px inset #808080;
+        }
+        
+        .example-text {
+            font-size: 10px;
+            color: #404040;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: 3px;
+        }
+        
+        .example-text i {
+            color: #000080;
+            font-size: 9px;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 5px 12px;
+            border: 2px outset #dfdfdf;
+            border-radius: 0;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background-color: #c0c0c0;
+            color: #000000;
+            min-width: 110px;
+            height: 30px;
+        }
+        
+        .btn:hover {
+            background-color: #d0d0d0;
+        }
+        
+        .btn:active {
+            border: 2px inset #dfdfdf;
+        }
+        
+        .btn-primary {
+            background-color: #c0c0c0;
+        }
+        
+        .btn-secondary {
+            background-color: #c0c0c0;
+        }
+        
+        .btn-danger {
+            background-color: #c0c0c0;
+        }
+        
+        .btn i {
+            font-size: 11px;
+        }
+        
+        /* Специальные стили для кнопок как на фото */
+        #translateBtn {
+            background-color: #c0c0c0;
+            border-color: #ffffff #808080 #808080 #ffffff;
+        }
+        
+        #swapBtn {
+            background-color: #c0c0c0;
+            border-color: #ffffff #808080 #808080 #ffffff;
+        }
+        
+        #clearBtn {
+            background-color: #c0c0c0;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            color: #000000;
+        }
+        
+        #exitBtn {
+            background-color: #c0c0c0;
+            border-color: #ffffff #808080 #808080 #ffffff;
+        }
+        
+        #copyBtn {
+            background-color: #c0c0c0;
+            border-color: #ffffff #808080 #808080 #ffffff;
+        }
+        
+        .footer {
+            text-align: center;
+            color: #404040;
+            font-size: 10px;
+            padding: 8px;
+            border-top: 1px solid #808080;
+            width: 100%;
+            margin-top: 5px;
+        }
+        
+        .instructions {
+            background-color: #e8e8e8;
+            border: 1px inset #808080;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        
+        .instructions h3 {
+            color: #000080;
+            margin-bottom: 8px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: bold;
+        }
+        
+        .instructions ul {
+            padding-left: 18px;
+        }
+        
+        .instructions li {
+            margin-bottom: 4px;
+            line-height: 1.3;
+            font-size: 11px;
+        }
+        
+        .github-link {
+            color: #000080;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
+            font-weight: bold;
+            font-size: 10px;
+        }
+        
+        .github-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Стили для окна с кнопками управления */
+        .window-controls {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            display: flex;
+            gap: 2px;
+        }
+        
+        .window-btn {
+            width: 18px;
+            height: 16px;
+            background-color: #c0c0c0;
+            border: 1px outset #dfdfdf;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #000000;
+            padding: 0;
+            font-weight: bold;
+        }
+        
+        .window-btn:hover {
+            background-color: #d0d0d0;
+        }
+        
+        .window-btn:active {
+            border: 1px inset #dfdfdf;
+        }
+        
+        .highlight {
+            color: #000080;
+            font-weight: bold;
+        }
+        
+        /* Стили для ретро-уведомлений */
+        .retro-notification {
+            position: fixed;
+            top: 50px;
+            right: 30px;
+            background-color: #c0c0c0;
+            border: 2px outset #dfdfdf;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 3px 3px 0px #808080;
+            max-width: 250px;
+        }
+        
+        .retro-notification.success {
+            border-color: #008000;
+        }
+        
+        .retro-notification.error {
+            border-color: #800000;
+        }
+        
+        /* Специальный стиль для текста в кнопках как на фото */
+        .btn-text {
+            margin-left: 4px;
+        }
+        
+        /* Стиль для разделителя */
+        .separator {
+            height: 1px;
+            background-color: #808080;
+            margin: 10px 0;
+            border-top: 1px solid #ffffff;
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 550px) {
+            .container {
+                width: 95%;
+                max-width: 500px;
+            }
+            
+            .header {
+                flex-direction: column;
+                height: auto;
+                padding: 8px;
+                gap: 8px;
+            }
+            
+            .window-controls {
+                position: static;
+                margin-top: 5px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            
+            .ukraine-badge {
+                width: 120px;
+                height: 120px;
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Бейдж "Сделано в Украине" -->
+    <div class="ukraine-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <defs>
+                <linearGradient id="ukrFlag" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#0057b7;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#0057b7;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#ffd700;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#ffd700;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <circle cx="150" cy="150" r="140" fill="url(#ukrFlag)" stroke="#000" stroke-width="2"/>
+            <text x="150" y="130" text-anchor="middle" font-family="Arial" font-size="24" font-weight="bold" fill="#fff">СДЕЛАНО</text>
+            <text x="150" y="160" text-anchor="middle" font-family="Arial" font-size="24" font-weight="bold" fill="#fff">В</text>
+            <text x="150" y="190" text-anchor="middle" font-family="Arial" font-size="24" font-weight="bold" fill="#fff">УКРАИНЕ</text>
+        </svg>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1><i class="fas fa-language title-icon"></i> Переводчик крякоэябр ;D</h1>
+                <p class="subtitle">[ Ghbvth => Пример ]</p>
+            </div>
+            
+            <div class="language-switcher">
+                <select class="language-select" id="languageSelect">
+                    <option value="uk">🇺🇦 Українська</option>
+                    <option value="ru" selected>🇷🇺 Русский</option>
+                    <option value="en">🇺🇸 English</option>
+                    <option value="de">🇩🇪 Deutsch</option>
+                    <option value="fr">🇫🇷 Français</option>
+                    <option value="es">🇪🇸 Español</option>
+                </select>
+            </div>
+            
+            <div class="window-controls">
+                <button class="window-btn" title="Свернуть">_</button>
+                <button class="window-btn" title="Развернуть">□</button>
+                <button class="window-btn" title="Закрыть">X</button>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="translation-area">
+                <div class="input-group">
+                    <label class="input-label" id="inputLabel">Ghbdtn</label>
+                    <textarea class="text-input" id="inputText">Ghbdtn</textarea>
+                    <div class="example-text">
+                        <i class="fas fa-caret-right"></i> <span id="inputExample">Пример: "Ghbvth" → "Привет", "Nfr" → "Мир"</span>
+                    </div>
+                </div>
+                
+                <div class="output-group">
+                    <label class="output-label" id="outputLabel">Привет</label>
+                    <div class="text-output" id="outputText">Привет</div>
+                    <div class="example-text">
+                        <i class="fas fa-info-circle"></i> <span id="outputHint">Автоматически переводит при вводе</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="separator"></div>
+            
+            <div class="buttons">
+                <button class="btn" id="translateBtn">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span class="btn-text" id="translateBtnText">Перевести</span>
+                </button>
+                <button class="btn" id="swapBtn">
+                    <i class="fas fa-retweet"></i>
+                    <span class="btn-text" id="swapBtnText">Поменять направление</span>
+                </button>
+                <button class="btn" id="clearBtn">
+                    <i class="fas fa-broom"></i>
+                    <span class="btn-text" id="clearBtnText">Очистить</span>
+                </button>
+                <button class="btn" id="exitBtn">
+                    <i class="fas fa-door-open"></i>
+                    <span class="btn-text" id="exitBtnText">Выход</span>
+                </button>
+            </div>
+            
+            <div class="instructions">
+                <h3><i class="fas fa-question-circle"></i> <span id="instructionsTitle">Как это работает?</span></h3>
+                <ul>
+                    <li id="instruction1">Инструмент переводит текст, набранный в <span class="highlight">английской раскладке</span> вместо русской, обратно на русский язык.</li>
+                    <li id="instruction2">Например: "<span class="highlight">Ghbdtn</span>" → "<span class="highlight">Привет</span>", "<span class="highlight">Nfr</span>" → "<span class="highlight">Мир</span>"</li>
+                    <li id="instruction3">Также работает обратный перевод: "<span class="highlight">Привет</span>" → "<span class="highlight">Ghbdtn</span>"</li>
+                    <li id="instruction4">Нажмите "Поменять направление" для перевода с русского на "ошибочную" раскладку.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p id="footerText">Создано для GitHub Pages | Переводчик "крякоэябр" :D</p>
+            <a href="https://github.com" target="_blank" class="github-link">
+                <i class="fab fa-github"></i> <span id="githubLink">GitHub</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Элементы DOM
+            const inputText = document.getElementById('inputText');
+            const outputText = document.getElementById('outputText');
+            const translateBtn = document.getElementById('translateBtn');
+            const swapBtn = document.getElementById('swapBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const exitBtn = document.getElementById('exitBtn');
+            const languageSelect = document.getElementById('languageSelect');
+            const windowButtons = document.querySelectorAll('.window-btn');
+            
+            // Текстовые элементы для перевода
+            const inputLabel = document.getElementById('inputLabel');
+            const outputLabel = document.getElementById('outputLabel');
+            const inputExample = document.getElementById('inputExample');
+            const outputHint = document.getElementById('outputHint');
+            const instructionsTitle = document.getElementById('instructionsTitle');
+            const instruction1 = document.getElementById('instruction1');
+            const instruction2 = document.getElementById('instruction2');
+            const instruction3 = document.getElementById('instruction3');
+            const instruction4 = document.getElementById('instruction4');
+            const footerText = document.getElementById('footerText');
+            const githubLink = document.getElementById('githubLink');
+            const translateBtnText = document.getElementById('translateBtnText');
+            const swapBtnText = document.getElementById('swapBtnText');
+            const clearBtnText = document.getElementById('clearBtnText');
+            const exitBtnText = document.getElementById('exitBtnText');
+            
+            // Текущий язык интерфейса
+            let currentLang = 'ru';
+            
+            // Таблица соответствия символов (английская раскладка -> русская)
+            const enToRuMap = {
+                'q': 'й', 'w': 'ц', 'e': 'у', 'r': 'к', 't': 'е', 'y': 'н', 'u': 'г',
+                'i': 'ш', 'o': 'щ', 'p': 'з', '[': 'х', ']': 'ъ', 'a': 'ф', 's': 'ы',
+                'd': 'в', 'f': 'а', 'g': 'п', 'h': 'р', 'j': 'о', 'k': 'л', 'l': 'д',
+                ';': 'ж', "'": 'э', 'z': 'я', 'x': 'ч', 'c': 'с', 'v': 'м', 'b': 'и',
+                'n': 'т', 'm': 'ь', ',': 'б', '.': 'ю', '/': '.', '`': 'ё',
+                'Q': 'Й', 'W': 'Ц', 'E': 'У', 'R': 'К', 'T': 'Е', 'Y': 'Н', 'U': 'Г',
+                'I': 'Ш', 'O': 'Щ', 'P': 'З', '{': 'Х', '}': 'Ъ', 'A': 'Ф', 'S': 'Ы',
+                'D': 'В', 'F': 'А', 'G': 'П', 'H': 'Р', 'J': 'О', 'K': 'Л', 'L': 'Д',
+                ':': 'Ж', '"': 'Э', 'Z': 'Я', 'X': 'Ч', 'C': 'С', 'V': 'М', 'B': 'И',
+                'N': 'Т', 'M': 'Ь', '<': 'Б', '>': 'Ю', '?': ',', '~': 'Ё',
+                '@': '"', '#': '№', '$': ';', '^': ':', '&': '?'
+            };
+            
+            // Обратная таблица (русская -> английская раскладка)
+            const ruToEnMap = {};
+            for (const [key, value] of Object.entries(enToRuMap)) {
+                ruToEnMap[value] = key;
+            }
+            
+            // Направление перевода (true: en->ru, false: ru->en)
+            let translationDirection = true;
+            
+            // Словари для перевода интерфейса
+            const translations = {
+                'uk': {
+                    // Українська
+                    'title': 'Перекладач крякоэябр',
+                    'subtitle': '[ Ghbvth => Приклад ]',
+                    'inputLabel': 'Ghbdtn',
+                    'inputPlaceholder': 'Введіть текст в англійській розкладці...',
+                    'inputExample': 'Приклад: "Ghbvth" → "Привіт", "Nfr" → "Мир"',
+                    'outputLabel': 'Привіт',
+                    'outputHint': 'Автоматично перекладає при вводі',
+                    'translateBtn': 'Перекласти',
+                    'swapBtn': 'Змінити напрямок',
+                    'clearBtn': 'Очистити',
+                    'exitBtn': 'Вихід',
+                    'instructionsTitle': 'Як це працює?',
+                    'instruction1': 'Інструмент перекладає текст, набраний в <span class="highlight">англійській розкладці</span> замість російської, назад на російську мову.',
+                    'instruction2': 'Наприклад: "<span class="highlight">Ghbdtn</span>" → "<span class="highlight">Привіт</span>", "<span class="highlight">Nfr</span>" → "<span class="highlight">Мир</span>"',
+                    'instruction3': 'Також працює зворотний переклад: "<span class="highlight">Привіт</span>" → "<span class="highlight">Ghbdtn</span>"',
+                    'instruction4': 'Натисніть "Змінити напрямок" для перекладу з російської на "помилкову" розкладку.',
+                    'footerText': 'Створено для GitHub Pages | Перекладач "крякоэябр" :D',
+                    'githubLink': 'GitHub',
+                    'notificationTranslated': 'Текст перекладено!',
+                    'notificationCopied': 'Текст скопійовано в буфер обміну!',
+                    'notificationNothing': 'Немає що копіювати!',
+                    'notificationError': 'Помилка при копіюванні',
+                    'hotkeyTip': 'Порада: Ctrl+Enter для перекладу, Ctrl+C для копіювання, Esc для очищення'
+                },
+                'ru': {
+                    // Русский
+                    'title': 'Переводчик крякоэябр',
+                    'subtitle': '[ Ghbvth => Пример ]',
+                    'inputLabel': 'Ghbdtn',
+                    'inputPlaceholder': 'Введите текст в английской раскладке...',
+                    'inputExample': 'Пример: "Ghbvth" → "Привет", "Nfr" → "Мир"',
+                    'outputLabel': 'Привет',
+                    'outputHint': 'Автоматически переводит при вводе',
+                    'translateBtn': 'Перевести',
+                    'swapBtn': 'Поменять направление',
+                    'clearBtn': 'Очистить',
+                    'exitBtn': 'Выход',
+                    'instructionsTitle': 'Как это работает?',
+                    'instruction1': 'Инструмент переводит текст, набранный в <span class="highlight">английской раскладке</span> вместо русской, обратно на русский язык.',
+                    'instruction2': 'Например: "<span class="highlight">Ghbdtn</span>" → "<span class="highlight">Привет</span>", "<span class="highlight">Nfr</span>" → "<span class="highlight">Мир</span>"',
+                    'instruction3': 'Также работает обратный перевод: "<span class="highlight">Привет</span>" → "<span class="highlight">Ghbdtn</span>"',
+                    'instruction4': 'Нажмите "Поменять направление" для перевода с русского на "ошибочную" раскладку.',
+                    'footerText': 'Создано для GitHub Pages | Переводчик "крякоэябр" :D',
+                    'githubLink': 'GitHub',
+                    'notificationTranslated': 'Текст переведен!',
+                    'notificationCopied': 'Текст скопирован в буфер обмена!',
+                    'notificationNothing': 'Нечего копировать!',
+                    'notificationError': 'Ошибка при копировании',
+                    'hotkeyTip': 'Совет: Ctrl+Enter для перевода, Ctrl+C для копирования, Esc для очистки'
+                },
+                'en': {
+                    // English
+                    'title': 'Translator kryakoyabr',
+                    'subtitle': '[ Ghbvth => Example ]',
+                    'inputLabel': 'Ghbdtn',
+                    'inputPlaceholder': 'Enter text in English layout...',
+                    'inputExample': 'Example: "Ghbvth" → "Привет", "Nfr" → "Мир"',
+                    'outputLabel': 'Hello',
+                    'outputHint': 'Automatically translates on input',
+                    'translateBtn': 'Translate',
+                    'swapBtn': 'Swap direction',
+                    'clearBtn': 'Clear',
+                    'exitBtn': 'Exit',
+                    'instructionsTitle': 'How does it work?',
+                    'instruction1': 'The tool translates text typed in <span class="highlight">English layout</span> instead of Russian back to Russian.',
+                    'instruction2': 'For example: "<span class="highlight">Ghbdtn</span>" → "<span class="highlight">Привет</span>", "<span class="highlight">Nfr</span>" → "<span class="highlight">Мир</span>"',
+                    'instruction3': 'Reverse translation also works: "<span class="highlight">Привет</span>" → "<span class="highlight">Ghbdtn</span>"',
+                    'instruction4': 'Click "Swap direction" to translate from Russian to "wrong" layout.',
+                    'footerText': 'Created for GitHub Pages | Translator "kryakoyabr" :D',
+                    'githubLink': 'GitHub',
+                    'notificationTranslated': 'Text translated!',
+                    'notificationCopied': 'Text copied to clipboard!',
+                    'notificationNothing': 'Nothing to copy!',
+                    'notificationError': 'Error when copying',
+                    'hotkeyTip': 'Tip: Ctrl+Enter to translate, Ctrl+C to copy, Esc to clear'
+                },
+                'de': {
+                    // Deutsch
+                    'title': 'Übersetzer kryakoyabr',
+                    'subtitle': '[ Ghbvth => Beispiel ]',
+                    'inputLabel': 'Ghbdtn',
+                    'inputPlaceholder': 'Text in englischer Belegung eingeben...',
+                    'inputExample': 'Beispiel: "Ghbvth" → "Привет", "Nfr" → "Мир"',
+                    'outputLabel': 'Hallo',
+                    'outputHint': 'Automatische Übersetzung bei Eingabe',
+                    'translateBtn': 'Übersetzen',
+                    'swapBtn': 'Richtung wechseln',
+                    'clearBtn': 'Löschen',
+                    'exitBtn': 'Beenden',
+                    'instructionsTitle': 'Wie funktioniert es?',
+                    'instruction1': 'Das Tool übersetzt Text, der in <span class="highlight">englischer Belegung</span> statt russisch getippt wurde, zurück ins Russische.',
+                    'instruction2': 'Zum Beispiel: "<span class="highlight">Ghbdtn</span>" → "<span class="highlight">Привет</span>", "<span class="highlight">Nfr</span>" → "<span class="highlight">Мир</span>"',
+                    'instruction3': 'Umgekehrte Übersetzung funktioniert auch: "<span class="highlight">Привет</span>" → "<span class="highlight">Ghbdtn</span>"',
+                    'instruction4': 'Klicken Sie auf "Richtung wechseln", um vom Russischen in die "falsche" Belegung zu übersetzen.',
+                    'footerText': 'Erstellt für GitHub Pages | Übersetzer "kryakoyabr" :D',
+                    'githubLink': 'GitHub',
+                    'notificationTranslated': 'Text übersetzt!',
+                    'notificationCopied': 'Text in die Zwischenablage kopiert!',
+                    'notificationNothing': 'Nichts zu kopieren!',
+                    'notificationError': 'Fehler beim Kopieren',
+                    'hotkeyTip': 'Tipp: Strg+Enter zum Übersetzen, Strg+C zum Kopieren, Esc zum Löschen'
+                },
+                'fr': {
+                    // Français
+                    'title': 'Traducteur kryakoyabr',
+                    'subtitle': '[ Ghbvth => Exemple ]',
+                    'inputLabel': 'Ghbdtn',
+                    'inputPlaceholder': 'Entrez le texte en disposition anglaise...',
+                    'inputExample': 'Exemple: "Ghbvth" → "Привет", "Nfr" → "Мир"',
+                    'outputLabel': 'Bonjour',
+                    'outputHint': 'Traduit automatiquement à la saisie',
+                    'translateBtn': 'Traduire',
+                    'swapBtn': 'Changer de direction',
+                    'clearBtn': 'Effacer',
+                    'exitBtn': 'Quitter',
+                    'instructionsTitle': 'Comment ça marche?',
+                    'instruction1': 'L\'outil traduit le texte tapé en <span class="highlight">disposition anglaise</span> au lieu du russe vers le russe.',
+                    'instruction2': 'Par exemple: "<span class="highlight">Ghbdtn</span>" → "<span class="highlight">Привет</span>", "<span class="highlight">Nfr</span>" → "<span class="highlight">Мир</span>"',
+                    'instruction3': 'La traduction inverse fonctionne également: "<span class="highlight">Привет</span>" → "<span class="highlight">Ghbdtn</span>"',
+                    'instruction4': 'Cliquez sur "Changer de direction" pour traduire du russe vers la disposition "incorrecte".',
+                    'footerText': 'Créé pour GitHub Pages | Traducteur "kryakoyabr" :D',
+                    'githubLink': 'GitHub',
+                    'notificationTranslated': 'Texte traduit!',
+                    'notificationCopied': 'Texte copié dans le presse-papiers!',
+                    'notificationNothing': 'Rien à copier!',
+                    'notificationError': 'Erreur lors de la copie',
+                    'hotkeyTip': 'Astuce: Ctrl+Enter pour traduire, Ctrl+C pour copier, Esc pour effacer'
+                },
+                'es': {
+                    // Español
+                    'title': 'Traductor kryakoyabr',
+                    'subtitle': '[ Ghbvth => Ejemplo ]',
+                    'inputLabel': 'Ghbdtn',
+                    'inputPlaceholder': 'Introduce texto en diseño inglés...',
+                    'inputExample': 'Ejemplo: "Ghbvth" → "Привет", "Nfr" → "Мир"',
+                    'outputLabel': 'Hola',
+                    'outputHint': 'Traduce automáticamente al escribir',
+                    'translateBtn': 'Traducir',
+                    'swapBtn': 'Cambiar dirección',
+                    'clearBtn': 'Limpiar',
+                    'exitBtn': 'Salir',
+                    'instructionsTitle': '¿Cómo funciona?',
+                    'instruction1': 'La herramienta traduce texto escrito en <span class="highlight">diseño inglés</span> en lugar de ruso de vuelta al ruso.',
+                    'instruction2': 'Por ejemplo: "<span class="highlight">Ghbdtn</span>" → "<span class="highlight">Привет</span>", "<span class="highlight">Nfr</span>" → "<span class="highlight">Мир</span>"',
+                    'instruction3': 'La traducción inversa también funciona: "<span class="highlight">Привет</span>" → "<span class="highlight">Ghbdtn</span>"',
+                    'instruction4': 'Haz clic en "Cambiar dirección" para traducir del ruso al diseño "incorrecto".',
+                    'footerText': 'Creado para GitHub Pages | Traductor "kryakoyabr" :D',
+                    'githubLink': 'GitHub',
+                    'notificationTranslated': '¡Texto traducido!',
+                    'notificationCopied': '¡Texto copiado al portapapeles!',
+                    'notificationNothing': '¡Nada que copiar!',
+                    'notificationError': 'Error al copiar',
+                    'hotkeyTip': 'Consejo: Ctrl+Enter para traducir, Ctrl+C para copiar, Esc para limpiar'
+                }
+            };
+            
+            // Функция перевода текста
+            function translateText(text, direction) {
+                if (!text.trim()) return '';
+                
+                let result = '';
+                const map = direction ? enToRuMap : ruToEnMap;
+                
+                for (let i = 0; i < text.length; i++) {
+                    const char = text[i];
+                    result += map[char] || char;
+                }
+                
+                return result;
+            }
+            
+            // Обновление результата перевода
+            function updateTranslation() {
+                const text = inputText.value;
+                const translated = translateText(text, translationDirection);
+                outputText.textContent = translated;
+            }
+            
+            // Смена направления перевода
+            function swapDirection() {
+                translationDirection = !translationDirection;
+                
+                // Меняем местами текст в полях ввода/вывода
+                const currentInput = inputText.value;
+                const currentOutput = outputText.textContent;
+                
+                inputText.value = currentOutput;
+                outputText.textContent = currentInput;
+                
+                // Обновляем заголовки полей
+                updateInputOutputLabels();
+            }
+            
+            // Обновление заголовков полей ввода/вывода
+            function updateInputOutputLabels() {
+                if (translationDirection) {
+                    if (currentLang === 'uk') {
+                        inputLabel.textContent = 'Ghbdtn';
+                        outputLabel.textContent = 'Привіт';
+                    } else if (currentLang === 'ru') {
+                        inputLabel.textContent = 'Ghbdtn';
+                        outputLabel.textContent = 'Привет';
+                    } else if (currentLang === 'en') {
+                        inputLabel.textContent = 'Ghbdtn';
+                        outputLabel.textContent = 'Hello';
+                    } else if (currentLang === 'de') {
+                        inputLabel.textContent = 'Ghbdtn';
+                        outputLabel.textContent = 'Hallo';
+                    } else if (currentLang === 'fr') {
+                        inputLabel.textContent = 'Ghbdtn';
+                        outputLabel.textContent = 'Bonjour';
+                    } else if (currentLang === 'es') {
+                        inputLabel.textContent = 'Ghbdtn';
+                        outputLabel.textContent = 'Hola';
+                    }
+                } else {
+                    if (currentLang === 'uk') {
+                        inputLabel.textContent = 'Привіт';
+                        outputLabel.textContent = 'Ghbdtn';
+                    } else if (currentLang === 'ru') {
+                        inputLabel.textContent = 'Привет';
+                        outputLabel.textContent = 'Ghbdtn';
+                    } else if (currentLang === 'en') {
+                        inputLabel.textContent = 'Hello';
+                        outputLabel.textContent = 'Ghbdtn';
+                    } else if (currentLang === 'de') {
+                        inputLabel.textContent = 'Hallo';
+                        outputLabel.textContent = 'Ghbdtn';
+                    } else if (currentLang === 'fr') {
+                        inputLabel.textContent = 'Bonjour';
+                        outputLabel.textContent = 'Ghbdtn';
+                    } else if (currentLang === 'es') {
+                        inputLabel.textContent = 'Hola';
+                        outputLabel.textContent = 'Ghbdtn';
+                    }
+                }
+            }
+            
+            // Очистка полей
+            function clearFields() {
+                inputText.value = '';
+                outputText.textContent = '';
+                inputText.focus();
+                showNotification(translations[currentLang].notificationNothing, 'error');
+            }
+            
+            // Выход из приложения
+            function exitApp() {
+                showNotification('Выход из приложения...', 'error');
+                setTimeout(() => {
+                    document.body.innerHTML = `
+                        <div style="
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            height: 100vh;
+                            font-family: 'Arial', sans-serif;
+                            background-color: #000066;
+                            color: #ffffff;
+                            font-size: 20px;
+                            text-align: center;
+                            padding: 20px;
+                        ">
+                            <div>
+                                <h1 style="color: #ffff00; margin-bottom: 20px;">Переводчик закрыт</h1>
+                                <p>Обновите страницу для повторного запуска.</p>
+                                <p style="margin-top: 30px; font-size: 16px; color: #c0c0c0;">Сделано в Украине 🇺🇦</p>
+                            </div>
+                        </div>
+                    `;
+                }, 1000);
+            }
+            
+            // Показать ретро-уведомление
+            function showNotification(message, type) {
+                // Удаляем старое уведомление, если есть
+                const oldNotification = document.querySelector('.retro-notification');
+                if (oldNotification) {
+                    oldNotification.remove();
+                }
+                
+                // Создаем новое уведомление
+                const notification = document.createElement('div');
+                notification.className = `retro-notification ${type}`;
+                notification.textContent = message;
+                
+                document.body.appendChild(notification);
+                
+                // Удаляем уведомление через 3 секунды
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 3000);
+            }
+            
+            // Смена языка интерфейса
+            function changeLanguage(lang) {
+                if (currentLang === lang) return;
+                
+                currentLang = lang;
+                
+                // Устанавливаем выбранный язык в select
+                languageSelect.value = lang;
+                
+                // Обновляем заголовок и подзаголовок
+                document.querySelector('.header h1').innerHTML = `<i class="fas fa-language title-icon"></i> ${translations[lang].title} ;D`;
+                document.querySelector('.subtitle').textContent = translations[lang].subtitle;
+                
+                // Обновляем текстовые элементы
+                inputExample.textContent = translations[lang].inputExample;
+                outputHint.textContent = translations[lang].outputHint;
+                instructionsTitle.textContent = translations[lang].instructionsTitle;
+                instruction1.innerHTML = translations[lang].instruction1;
+                instruction2.innerHTML = translations[lang].instruction2;
+                instruction3.innerHTML = translations[lang].instruction3;
+                instruction4.innerHTML = translations[lang].instruction4;
+                footerText.textContent = translations[lang].footerText;
+                githubLink.textContent = translations[lang].githubLink;
+                translateBtnText.textContent = translations[lang].translateBtn;
+                swapBtnText.textContent = translations[lang].swapBtn;
+                clearBtnText.textContent = translations[lang].clearBtn;
+                exitBtnText.textContent = translations[lang].exitBtn;
+                
+                // Обновляем плейсхолдер
+                inputText.placeholder = translations[lang].inputPlaceholder;
+                
+                // Обновляем заголовки полей ввода/вывода
+                updateInputOutputLabels();
+                
+                // Обновляем перевод
+                updateTranslation();
+                
+                // Сохраняем язык в localStorage
+                localStorage.setItem('translatorLang', lang);
+                
+                // Показываем уведомление
+                let langName = 'Русский';
+                if (lang === 'uk') langName = 'Українська';
+                else if (lang === 'en') langName = 'English';
+                else if (lang === 'de') langName = 'Deutsch';
+                else if (lang === 'fr') langName = 'Français';
+                else if (lang === 'es') langName = 'Español';
+                
+                showNotification(`${langName} - язык интерфейса установлен`, 'success');
+            }
+            
+            // Обработчики событий
+            inputText.addEventListener('input', updateTranslation);
+            translateBtn.addEventListener('click', updateTranslation);
+            swapBtn.addEventListener('click', swapDirection);
+            clearBtn.addEventListener('click', clearFields);
+            exitBtn.addEventListener('click', exitApp);
+            
+            // Обработчик для select языка
+            languageSelect.addEventListener('change', () => {
+                changeLanguage(languageSelect.value);
+            });
+            
+            // Обработчики для кнопок окна
+            windowButtons.forEach((btn, index) => {
+                btn.addEventListener('click', () => {
+                    if (index === 0) {
+                        // Свернуть
+                        showNotification('Окно свернуто', 'success');
+                        document.querySelector('.container').style.opacity = '0.5';
+                        setTimeout(() => {
+                            document.querySelector('.container').style.opacity = '1';
+                        }, 1000);
+                    } else if (index === 1) {
+                        // Развернуть
+                        const container = document.querySelector('.container');
+                        if (container.style.width === '95vw') {
+                            container.style.width = '500px';
+                            container.style.maxWidth = '500px';
+                            showNotification('Окно восстановлено', 'success');
+                        } else {
+                            container.style.width = '95vw';
+                            container.style.maxWidth = '95vw';
+                            showNotification('Окно развернуто', 'success');
+                        }
+                    } else if (index === 2) {
+                        // Закрыть
+                        exitApp();
+                    }
+                });
+            });
+            
+            // Инициализация языка из localStorage или браузера
+            function initLanguage() {
+                const savedLang = localStorage.getItem('translatorLang');
+                const browserLang = navigator.language.slice(0, 2);
+                
+                if (savedLang && translations[savedLang]) {
+                    changeLanguage(savedLang);
+                } else if (browserLang === 'uk') {
+                    changeLanguage('uk');
+                } else if (browserLang === 'ru') {
+                    changeLanguage('ru');
+                } else if (browserLang === 'de') {
+                    changeLanguage('de');
+                } else if (browserLang === 'fr') {
+                    changeLanguage('fr');
+                } else if (browserLang === 'es') {
+                    changeLanguage('es');
+                } else {
+                    changeLanguage('en');
+                }
+            }
+            
+            // Инициализация перевода при загрузке
+            initLanguage();
+            updateTranslation();
+            
+            // Добавляем обработчик клавиш
+            document.addEventListener('keydown', function(e) {
+                // Ctrl+Enter для перевода
+                if (e.ctrlKey && e.key === 'Enter') {
+                    updateTranslation();
+                    showNotification(translations[currentLang].notificationTranslated, 'success');
+                }
+                
+                // Escape для очистки
+                if (e.key === 'Escape') {
+                    clearFields();
+                }
+            });
+            
+            // Информация о горячих клавишах
+            setTimeout(() => {
+                showNotification(translations[currentLang].hotkeyTip, 'success');
+            }, 1500);
+            
+            // Эффект "нажатия" для кнопок
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.addEventListener('mousedown', function() {
+                    this.style.border = '2px inset #808080';
+                    this.style.transform = 'translate(1px, 1px)';
+                });
+                
+                btn.addEventListener('mouseup', function() {
+                    this.style.border = '2px outset #dfdfdf';
+                    this.style.transform = 'translate(0, 0)';
+                });
+                
+                btn.addEventListener('mouseleave', function() {
+                    this.style.border = '2px outset #dfdfdf';
+                    this.style.transform = 'translate(0, 0)';
+                });
+            });
+            
+            // Эффект для кнопок оконного управления
+            document.querySelectorAll('.window-btn').forEach(btn => {
+                btn.addEventListener('mousedown', function() {
+                    this.style.border = '1px inset #dfdfdf';
+                });
+                
+                btn.addEventListener('mouseup', function() {
+                    this.style.border = '1px outset #dfdfdf';
+                });
+                
+                btn.addEventListener('mouseleave', function() {
+                    this.style.border = '1px outset #dfdfdf';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
