@@ -1,6 +1,11 @@
 # RetroLayoutTranslator
 
+![Uploading image.png…]()
+
+
 **Віндовс-стайл перекладач помилкової розкладки клавіатури**
+
+**Демо:** https://carbon6600.github.io/RetroLayoutTranslator/
 
 ## 🌟 Особливості
 - 🖥️ Автентичний ретро-стиль Windows 95
@@ -15,9 +20,6 @@ git clone https://github.com/ваш-username/RetroLayoutTranslator.git
 cd RetroLayoutTranslator
 # Відкрити index.html
 ```
-
-**Демо:** https://carbon6600.github.io/RetroLayoutTranslator/
-
 ## 📖 Використання
 1. Введіть текст у ліве поле (`Ghbdtn`)
 2. Отримайте переклад (`Привіт`)
@@ -42,8 +44,6 @@ cd RetroLayoutTranslator
 ## 📄 Ліцензія
 MIT License - [LICENSE](LICENSE)
 
-## 👤 Автор
-**Ваше Ім'я** - [@ваш-username](https://github.com/ваш-username)
 
 ---
 
