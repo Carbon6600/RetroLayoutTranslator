@@ -16,7 +16,7 @@ cd RetroLayoutTranslator
 # Відкрити index.html
 ```
 
-**Демо:** https://ваш-username.github.io/RetroLayoutTranslator/
+**Демо:** https://carbon6600.github.io/RetroLayoutTranslator/
 
 ## 📖 Використання
 1. Введіть текст у ліве поле (`Ghbdtn`)
